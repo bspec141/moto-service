@@ -149,11 +149,14 @@ function Finde-Git {
     return $g
 }
 function Git-Mit($tok) {
-    $b64 = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("x-access-token:$tok"))
     $env:GIT_TERMINAL_PROMPT = '0'
     $ErrorActionPreference = 'Continue'   # PS 5.1: git-Meldungen auf stderr sonst = Abbruch
-    & $script:git -C $root -c safe.directory=* -c credential.helper= `
-        -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $b64" @args 2>$null
+    $opt = @('-C', $root, '-c', 'safe.directory=*', '-c', 'credential.helper=')
+    if ($tok) {
+        $b64 = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("x-access-token:$tok"))
+        $opt += @('-c', "http.https://github.com/.extraheader=AUTHORIZATION: basic $b64")
+    }
+    & $script:git @opt @args 2>$null
 }
 $git = Finde-Git
 if (-not $git -and (Get-Command winget -ErrorAction SilentlyContinue)) {
@@ -165,7 +168,14 @@ if (-not $git) {
     Write-Host "    Git fehlt – ohne Git keine automatischen Updates (Bot läuft trotzdem)." -ForegroundColor Yellow
 } else {
     $tok = if (Test-Path $tokenDatei) { (Get-Content $tokenDatei -Raw).Trim() } else { '' }
-    while ($true) {
+    $oeffentlich = $false
+    Git-Mit '' ls-remote -q $RepoUrl main | Out-Null
+    if ($LASTEXITCODE -eq 0) {   # Repo öffentlich: kein Token nötig
+        $oeffentlich = $true
+        $tok = ''
+        if (Test-Path $tokenDatei) { Remove-Item -Force $tokenDatei }
+    }
+    while (-not $oeffentlich) {
         if ($tok) {
             try { Git-Mit $tok ls-remote -q $RepoUrl main | Out-Null } catch {}
             if ($LASTEXITCODE -eq 0) { break }
@@ -176,10 +186,12 @@ if (-not $git) {
         $tok = (Read-Host "    GitHub-Token einfügen").Trim()
         if (-not $tok) { break }
     }
-    if ($tok) {
-        [IO.File]::WriteAllText($tokenDatei, $tok, (New-Object Text.UTF8Encoding $false))
-        # nur SYSTEM und Administratoren dürfen den Token lesen
-        & icacls $tokenDatei /inheritance:r /grant:r '*S-1-5-18:F' '*S-1-5-32-544:F' | Out-Null
+    if ($oeffentlich -or $tok) {
+        if ($tok) {
+            [IO.File]::WriteAllText($tokenDatei, $tok, (New-Object Text.UTF8Encoding $false))
+            # nur SYSTEM und Administratoren dürfen den Token lesen
+            & icacls $tokenDatei /inheritance:r /grant:r '*S-1-5-18:F' '*S-1-5-32-544:F' | Out-Null
+        }
         if (-not (Test-Path (Join-Path $root '.git'))) {
             # Projekt kam als ZIP: Git-Verwaltung nachrüsten, lokale Dateien (.env, moto.db) bleiben
             Git-Mit $tok init -q -b main | Out-Null

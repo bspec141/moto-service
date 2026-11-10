@@ -74,7 +74,7 @@ Die Abschnitte unten (manuelles Setup, NSSM) brauchst du dann nicht.
 
 Der Laptop holt alle 10 Minuten den Stand von `main` aus GitHub. Gibt es Änderungen (z.B. neue Einträge in `data/historie.yaml` oder ein angepasster Wartungsplan), übernimmt er sie und startet den Bot neu. Du musst also nicht mehr auf den Laptop zugreifen: Änderung ins Repo pushen, fertig.
 
-Weil das Repo privat ist, braucht der Laptop einen Token, der nur lesen darf:
+Ist das Repo **öffentlich**, braucht es nichts weiter. Nur falls es **privat** ist, braucht der Laptop einen Token, der nur lesen darf (der Installer merkt selbst, ob nötig):
 
 1. GitHub → Profilbild → **Settings** → **Developer settings** → **Personal access tokens** → **Fine-grained tokens** → **Generate new token**
 2. Name z.B. `moto-laptop`, Ablauf möglichst lang (oder „No expiration“, falls angeboten)
@@ -128,7 +128,7 @@ Optionale Werte in `.env`:
 
 1. In Telegram **@BotFather** öffnen (blauer Haken) und `/newbot` senden.
 2. Anzeigename eingeben, z.B. `Moto Service`.
-3. Benutzername eingeben. Er muss auf `bot` enden, z.B. `hamed_moto_bot`.
+3. Benutzername eingeben. Er muss auf `bot` enden, z.B. `toeff_service_erinnerer_bot`.
 4. BotFather schickt den **Token** (`123456789:AA…`). Ihn in `.env` als `BOT_TOKEN` eintragen.
    Den Token niemandem zeigen. Falls er doch rausgeht: bei BotFather `/revoke`.
 5. Optional: `/setprivacy` → Enable, `/setjoingroups` → Disable (der Bot ist nur für dich).

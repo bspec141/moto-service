@@ -30,19 +30,22 @@ $gitExe = (Get-Command git -ErrorAction SilentlyContinue).Source
 if (-not $gitExe -and (Test-Path "$env:ProgramFiles\Git\cmd\git.exe")) { $gitExe = "$env:ProgramFiles\Git\cmd\git.exe" }
 
 function Git {
-    $t = (Get-Content $token -Raw).Trim()
-    $b64 = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("x-access-token:$t"))
-    & $gitExe -C $root -c safe.directory=* -c credential.helper= `
-        -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $b64" @args 2>$null
+    $opt = @('-C', $root, '-c', 'safe.directory=*', '-c', 'credential.helper=')
+    if (Test-Path $token) {   # nur nötig, falls das Repo privat ist
+        $t = (Get-Content $token -Raw).Trim()
+        $b64 = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("x-access-token:$t"))
+        $opt += @('-c', "http.https://github.com/.extraheader=AUTHORIZATION: basic $b64")
+    }
+    & $gitExe @opt @args 2>$null
 }
 
 # Rückgabe: 'nichts', 'neustart' (Bot neu starten) oder 'skript' (lauf.ps1 selbst geändert)
 function Update {
-    if (-not $gitExe -or -not (Test-Path $token) -or -not (Test-Path (Join-Path $root '.git'))) { return 'nichts' }
+    if (-not $gitExe -or -not (Test-Path (Join-Path $root '.git'))) { return 'nichts' }
     try {
         $alt = "$(Git rev-parse HEAD)".Trim()
         Git fetch -q origin main
-        if ($LASTEXITCODE -ne 0) { Log "Update: fetch fehlgeschlagen (Internet? Token abgelaufen?)"; return 'nichts' }
+        if ($LASTEXITCODE -ne 0) { Log "Update: fetch fehlgeschlagen (Internet?)"; return 'nichts' }
         $neu = "$(Git rev-parse FETCH_HEAD)".Trim()
         if (-not $neu -or $neu -eq $alt) { return 'nichts' }
         $dateien = @(Git diff --name-only $alt $neu)
