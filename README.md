@@ -57,6 +57,21 @@ Telegram-Bot für den Wartungsstand der **Suzuki Inazuma 250 (2014)**. Er erinne
 
 ## Setup
 
+### Einfach: Doppelklick
+
+1. Projekt nach `C:\moto-service` holen (`git clone` oder ZIP entpacken).
+2. **`installieren.cmd` doppelklicken** und die Admin-Rückfrage mit Ja bestätigen.
+
+Das Programm installiert bei Bedarf Python 3.12 (über winget), legt `.venv` an, installiert die Pakete, fragt den Bot-Token ab, holt die Chat-ID selbst (du schreibst dem Bot einfach eine Nachricht) und richtet den **Autostart** ein: eine Aufgabe `moto-service` in der Windows-Aufgabenplanung. Sie startet den Bot mit Windows, auch ohne Anmeldung, und startet ihn nach Absturz oder Netzwerkausfall neu. Am Netzteil werden Ruhezustand und Zuklappen-Aktion ausgeschaltet.
+
+- Nochmals ausführen ist gefahrlos (z.B. nach `git pull`, um Pakete zu aktualisieren und den Bot neu zu starten).
+- `deinstallieren.cmd` entfernt den Autostart. Daten bleiben erhalten.
+- Logs: `logs\moto-service.log`, Startprobleme in `logs\fehler.log` und `logs\start.log`.
+
+Die Abschnitte unten (manuelles Setup, NSSM) brauchst du dann nicht.
+
+### Manuell
+
 Voraussetzung: **Python 3.12** von python.org. Beim Installer „Add python.exe to PATH“ anhaken.
 
 In PowerShell (Beispielpfad `C:\moto-service`):
@@ -247,6 +262,7 @@ moto_service/
   backup.py    SQLite-Backup mit Aufräumen
   __main__.py  Start, Logging
 data/          wartungsplan.yaml, historie.yaml (deine echten Daten)
+windows/       installieren.ps1, lauf.ps1 (Autostart), deinstallieren.ps1
 tests/         fixtures/data/ = feste Testdaten
 ```
 
