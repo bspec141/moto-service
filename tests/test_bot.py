@@ -16,7 +16,7 @@ from moto_service.db import Datenbank, importiere_seed
 from moto_service.dienst import Dienst
 
 CHAT = 4242
-DATA = Path(__file__).resolve().parent.parent / "data"
+DATA = Path(__file__).resolve().parent / "fixtures" / "data"  # feste Testdaten, unabhängig von data/
 
 
 class FakeRequest(BaseRequest):

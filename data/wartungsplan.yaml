@@ -1,4 +1,5 @@
-# Wartungsplan – BEISPIELWERTE. Bitte mit der Bedienungsanleitung / Werkstatt abgleichen.
+# Wartungsplan – Suzuki GW250 Inazuma, nach der Wartungstabelle der Betriebsanleitung (S. 6-4).
+# Wo die Tabelle nur "prüfen" vorgibt oder Spielraum lässt, ist ein mittlerer Wert gewählt.
 #
 # Pro Position:
 #   position:          Name (eindeutig, Gross/klein egal). Schlüssel für den Abgleich.
@@ -9,25 +10,62 @@
 #
 # Beim Start werden Positionen neu angelegt oder aktualisiert (Intervalle, Notiz).
 # Positionen löschen geht über diese Datei NICHT (Schutz der Historie).
+# tests/test_daten.py prüft, dass diese Datei und historie.yaml fehlerfrei importiert werden.
 
 positionen:
   - position: Öl
-    intervall_km: 6000
-    intervall_monate: 12
-    notiz: "Beispiel: 10W-40"
+    intervall_km: 5000
+    intervall_monate: 15
+    notiz: "Wechseln. Zuletzt Motul 4T 5100"
   - position: Ölfilter
-    intervall_km: 12000
-    intervall_monate: 24
+    intervall_km: 10000
+    intervall_monate: 30
+    notiz: "Wechseln, zusammen mit dem Öl. Teil 16510-07J10-000"
   - position: Kette schmieren
-    intervall_km: 600
+    intervall_km: 1000
+    notiz: "Reinigen und schmieren"
+  - position: Kette prüfen
+    intervall_km: 5000
+    intervall_monate: 15
+    notiz: "Durchhang prüfen, spannen; Ritzel und Kranz ansehen"
+  - position: Zündkerzen
+    intervall_km: 10000
+    intervall_monate: 30
+    notiz: "Wechseln (Tabelle: bei 5000 km prüfen, bei 10000 km wechseln)"
+  - position: Luftfilter
+    intervall_km: 15000
+    intervall_monate: 45
+    notiz: "Wechseln (dazwischen alle 5000 km prüfen/reinigen)"
+  - position: Ventilspiel
+    intervall_km: 10000
+    intervall_monate: 30
+    notiz: "Prüfen/einstellen (Tabelle: alle 5000 km prüfen, hier Mittelwert)"
+  - position: Inspektion klein
+    intervall_km: 5000
+    intervall_monate: 15
+    notiz: "Prüfen: Kraftstoffleitung, Gas- und Kupplungsseil, Kühlerschlauch, Bremsen, Bremsschlauch, Lenkung, Reifen; Fahrgestellschrauben festziehen"
+  - position: Inspektion gross
+    intervall_km: 10000
+    intervall_monate: 30
+    notiz: "Zusätzlich: Kraftstoffdampf- und Sekundärluftsystem, Gabel, Hinterradaufhängung; Auspuffschrauben festziehen"
+  - position: Kühlmittel
+    intervall_km: 12000
+    intervall_monate: 36
+    notiz: "Wechseln. Tabelle: Super Long Life (blau) 16000 km/48 Mt., andere (grün) 8000 km/24 Mt. – hier Mittelwert"
   - position: Bremsflüssigkeit
     intervall_monate: 24
-  - position: Zündkerzen
-    intervall_km: 12000
-  - position: Luftfilter
-    intervall_km: 18000
-  - position: Ventilspiel
-    intervall_km: 24000
+    notiz: "Wechseln"
+  - position: Bremsschlauch
+    intervall_monate: 48
+    notiz: "Wechseln"
+  - position: Reifen vorne
+    intervall_km: 15000
+    intervall_monate: 48
+    notiz: "Spätestens nach 4 Jahren wechseln; Profil mind. 1.6 mm. 110/80-17"
+  - position: Reifen hinten
+    intervall_km: 10000
+    intervall_monate: 48
+    notiz: "Spätestens nach 4 Jahren wechseln; Profil mind. 1.6 mm. 140/70-17"
   - position: MFK
     intervall_monate: 36
     notiz: "Datum aus dem Aufgebot prüfen"

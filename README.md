@@ -228,6 +228,8 @@ Fällt das WLAN aus, versucht der Bot es von selbst weiter. Verpasste Sonntagsfr
 
 Getestet werden die Fälligkeitslogik (km, Zeit, beides, Grenzfälle, Prognose, Sortierung), die Plausibilität, Termin-Erinnerungen, Eingaben (km, Datum, unscharfe Namen), der YAML-Abgleich, das Backup und die Bot-Handler gegen einen simulierten Telegram-Server.
 
+Die Tests nutzen feste Beispieldaten in `tests/fixtures/data/`. Deine echten Daten in `data/` kannst du also frei ändern, ohne dass Tests brechen. `tests/test_daten.py` prüft zusätzlich, dass `data/wartungsplan.yaml` und `data/historie.yaml` fehlerfrei importiert werden (keine unbekannte Position, kein sinkender km-Stand). Nach jeder Änderung an den YAML-Dateien also kurz `pytest` laufen lassen.
+
 ---
 
 ## Projektstruktur und Logik
@@ -244,8 +246,8 @@ moto_service/
   jobs.py      Sonntagsfrage, Nachfrage, Tagescheck, Backup
   backup.py    SQLite-Backup mit Aufräumen
   __main__.py  Start, Logging
-data/          wartungsplan.yaml, historie.yaml
-tests/
+data/          wartungsplan.yaml, historie.yaml (deine echten Daten)
+tests/         fixtures/data/ = feste Testdaten
 ```
 
 **Datenbank**

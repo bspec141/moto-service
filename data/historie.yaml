@@ -43,4 +43,27 @@ services:
     datum: 2026-09-30
     km: 18552
     wer: Moto 7 Cham
-    notiz: "Kettensatz neu (Kette, Ritzel, Kranz), geschmiert und gespannt. Rechnung 73157"
+    notiz: "Neuer Kettensatz, geschmiert. Rechnung 73157"
+  - position: Kette prüfen
+    datum: 2026-09-30
+    km: 18552
+    wer: Moto 7 Cham
+    kosten_chf: 193.06
+    notiz: "Kettensatz neu: Kette 27600-48H11-116, Ritzel 27510-48H20-000, Kranz 64511-48H10-000. Rechnung 73157"
+  - position: Kette schmieren
+    datum: 2026-10-13
+    km: 19500
+    wer: selbst
+    notiz: "Datum geschätzt (zwischen 30.09. und 10.11.)"
+  - position: Reifen vorne
+    datum: 2021-08-21
+    km: 10335
+    wer: Moto West Waltenschwil
+    kosten_chf: 131.75
+    notiz: "Michelin 110/80-17. Rechnung 122241 (exkl. MWST)"
+  - position: Reifen hinten
+    datum: 2021-08-21
+    km: 10335
+    wer: Moto West Waltenschwil
+    kosten_chf: 146.20
+    notiz: "Pirelli Sport Demon 140/70-17. Rechnung 122241 (exkl. MWST)"

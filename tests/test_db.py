@@ -6,7 +6,7 @@ import pytest
 from moto_service.backup import backup_erstellen
 from moto_service.db import Datenbank, importiere_seed
 
-DATA = Path(__file__).resolve().parent.parent / "data"
+DATA = Path(__file__).resolve().parent / "fixtures" / "data"  # feste Testdaten, unabhängig von data/
 
 
 @pytest.fixture

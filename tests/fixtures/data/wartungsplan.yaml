@@ -1,0 +1,33 @@
+# TESTDATEN – feste Beispieldaten für die Tests. Nicht für den Betrieb; echte Daten stehen in data/.
+#
+# Pro Position:
+#   position:          Name (eindeutig, Gross/klein egal). Schlüssel für den Abgleich.
+#   intervall_km:      optional, ganze Zahl
+#   intervall_monate:  optional, ganze Zahl
+#   notiz:             optional
+# Mindestens eines der beiden Intervalle muss gesetzt sein. Fällig ist, was zuerst erreicht wird.
+#
+# Beim Start werden Positionen neu angelegt oder aktualisiert (Intervalle, Notiz).
+# Positionen löschen geht über diese Datei NICHT (Schutz der Historie).
+
+positionen:
+  - position: Öl
+    intervall_km: 6000
+    intervall_monate: 12
+    notiz: "Beispiel: 10W-40"
+  - position: Ölfilter
+    intervall_km: 12000
+    intervall_monate: 24
+  - position: Kette schmieren
+    intervall_km: 600
+  - position: Bremsflüssigkeit
+    intervall_monate: 24
+  - position: Zündkerzen
+    intervall_km: 12000
+  - position: Luftfilter
+    intervall_km: 18000
+  - position: Ventilspiel
+    intervall_km: 24000
+  - position: MFK
+    intervall_monate: 36
+    notiz: "Datum aus dem Aufgebot prüfen"
