@@ -60,12 +60,12 @@ positionen:
     notiz: "Wechseln"
   - position: Reifen vorne
     intervall_km: 15000
-    intervall_monate: 48
-    notiz: "Spätestens nach 4 Jahren wechseln; Profil mind. 1.6 mm. 110/80-17"
+    intervall_monate: 72
+    notiz: "Spätestens nach 6 Jahren wechseln (Alter); Profil mind. 1.6 mm. 110/80-17"
   - position: Reifen hinten
     intervall_km: 10000
-    intervall_monate: 48
-    notiz: "Spätestens nach 4 Jahren wechseln; Profil mind. 1.6 mm. 140/70-17"
+    intervall_monate: 72
+    notiz: "Spätestens nach 6 Jahren wechseln (Alter); Profil mind. 1.6 mm. 140/70-17"
   - position: MFK
     intervall_monate: 36
     notiz: "Datum aus dem Aufgebot prüfen"
