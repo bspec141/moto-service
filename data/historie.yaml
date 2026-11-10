@@ -1,4 +1,4 @@
-# Historie – BEISPIELEINTRÄGE. Ersetze sie durch deine echten Daten.
+# Historie – Suzuki GW250 Inazuma (Chassis LC6DC111101103065)
 #
 # km_stand: abgelesene km-Stände
 #   datum: yyyy-mm-dd (oder dd.mm.yyyy in Anführungszeichen)
@@ -14,36 +14,33 @@
 #
 # Beim Start werden nur neue Einträge übernommen. Duplikat = gleiche Position + Datum + km.
 # Einträge, die nicht passen (km sinkt, unbekannte Position), stehen im Log und werden übersprungen.
-
 km_stand:
-  - datum: 2026-09-06
-    km: 13650
-  - datum: 2026-10-04
-    km: 13980
+  - datum: 2021-08-21
+    km: 10335
+  - datum: 2026-08-26
+    km: 16600
+  - datum: 2026-09-10
+    km: 17499
+  - datum: 2026-09-30
+    km: 18552
+  - datum: 2026-11-10
+    km: 21500
 
 services:
   - position: Öl
-    datum: 2026-03-21
-    km: 11800
-    wer: selbst
-    kosten_chf: 38.50
-    notiz: Motul 10W-40
+    datum: 2026-09-30
+    km: 18552
+    wer: Moto 7 Cham
+    kosten_chf: 48.84
+    notiz: "Motul 4T 5100, 2.4 l. Rechnung 73157 (total CHF 487.95 inkl. Arbeit, Kettensatz, MWST)"
   - position: Ölfilter
-    datum: 2026-03-21
-    km: 11800
-    wer: selbst
-    kosten_chf: 12
+    datum: 2026-09-30
+    km: 18552
+    wer: Moto 7 Cham
+    kosten_chf: 20.07
+    notiz: "16510-07J10-000. Rechnung 73157"
   - position: Kette schmieren
-    datum: 2026-10-04
-    km: 13980
-    wer: selbst
-  - position: Bremsflüssigkeit
-    datum: 2024-12-02
-    km: 8200
-    wer: Werkstatt Muster
-    kosten_chf: 65
-  - position: MFK
-    datum: 2024-05-14
-    km: 6900
-    wer: Strassenverkehrsamt
-    kosten_chf: 60
+    datum: 2026-09-30
+    km: 18552
+    wer: Moto 7 Cham
+    notiz: "Kettensatz neu (Kette, Ritzel, Kranz), geschmiert und gespannt. Rechnung 73157"
