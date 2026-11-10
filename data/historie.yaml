@@ -1,0 +1,49 @@
+# Historie – BEISPIELEINTRÄGE. Ersetze sie durch deine echten Daten.
+#
+# km_stand: abgelesene km-Stände
+#   datum: yyyy-mm-dd (oder dd.mm.yyyy in Anführungszeichen)
+#   km:    ganze Zahl
+#
+# services: ausgeführte Wartungen
+#   position:   Name genau wie in wartungsplan.yaml (Gross/klein egal)
+#   datum:      yyyy-mm-dd
+#   km:         optional (empfohlen), wird auch als km-Stand übernommen
+#   wer:        optional, z.B. selbst oder Name der Werkstatt
+#   kosten_chf: optional, z.B. 45 oder 45.50
+#   notiz:      optional
+#
+# Beim Start werden nur neue Einträge übernommen. Duplikat = gleiche Position + Datum + km.
+# Einträge, die nicht passen (km sinkt, unbekannte Position), stehen im Log und werden übersprungen.
+
+km_stand:
+  - datum: 2026-09-06
+    km: 13650
+  - datum: 2026-10-04
+    km: 13980
+
+services:
+  - position: Öl
+    datum: 2026-03-21
+    km: 11800
+    wer: selbst
+    kosten_chf: 38.50
+    notiz: Motul 10W-40
+  - position: Ölfilter
+    datum: 2026-03-21
+    km: 11800
+    wer: selbst
+    kosten_chf: 12
+  - position: Kette schmieren
+    datum: 2026-10-04
+    km: 13980
+    wer: selbst
+  - position: Bremsflüssigkeit
+    datum: 2024-12-02
+    km: 8200
+    wer: Werkstatt Muster
+    kosten_chf: 65
+  - position: MFK
+    datum: 2024-05-14
+    km: 6900
+    wer: Strassenverkehrsamt
+    kosten_chf: 60

@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+moto.db
+moto.db-*
+logs/
+backup/
+.pytest_cache/
