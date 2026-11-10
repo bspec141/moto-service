@@ -7,3 +7,4 @@ moto.db-*
 logs/
 backup/
 .pytest_cache/
+.github-token

@@ -139,7 +139,65 @@ Setze 'ALLOWED_CHAT_ID' $chat
 [IO.File]::WriteAllLines($envDatei, [string[]]$zeilen, (New-Object Text.UTF8Encoding $false))
 Fertig "Chat-ID: $chat (in .env gespeichert)"
 
-# --- 4. Autostart (Aufgabenplanung) ------------------------------------------
+# --- 4. Automatische Updates aus GitHub --------------------------------------
+Schritt "Automatische Updates aus GitHub"
+$RepoUrl = 'https://github.com/bspec141/moto-service.git'
+$tokenDatei = Join-Path $root '.github-token'
+function Finde-Git {
+    $g = (Get-Command git -ErrorAction SilentlyContinue).Source
+    if (-not $g -and (Test-Path "$env:ProgramFiles\Git\cmd\git.exe")) { $g = "$env:ProgramFiles\Git\cmd\git.exe" }
+    return $g
+}
+function Git-Mit($tok) {
+    $b64 = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("x-access-token:$tok"))
+    $env:GIT_TERMINAL_PROMPT = '0'
+    $ErrorActionPreference = 'Continue'   # PS 5.1: git-Meldungen auf stderr sonst = Abbruch
+    & $script:git -C $root -c safe.directory=* -c credential.helper= `
+        -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $b64" @args 2>$null
+}
+$git = Finde-Git
+if (-not $git -and (Get-Command winget -ErrorAction SilentlyContinue)) {
+    Write-Host "    Git wird installiert ..."
+    & winget install --id Git.Git -e --scope machine --silent --accept-package-agreements --accept-source-agreements
+    $git = Finde-Git
+}
+if (-not $git) {
+    Write-Host "    Git fehlt – ohne Git keine automatischen Updates (Bot läuft trotzdem)." -ForegroundColor Yellow
+} else {
+    $tok = if (Test-Path $tokenDatei) { (Get-Content $tokenDatei -Raw).Trim() } else { '' }
+    while ($true) {
+        if ($tok) {
+            try { Git-Mit $tok ls-remote -q $RepoUrl main | Out-Null } catch {}
+            if ($LASTEXITCODE -eq 0) { break }
+            Write-Host "    GitHub akzeptiert den Token nicht (abgelaufen oder falsche Rechte)." -ForegroundColor Yellow
+        }
+        Write-Host "    Das Repo ist privat. Für Updates braucht der Laptop einen GitHub-Token mit Leserecht"
+        Write-Host "    (Anleitung im README, Abschnitt 'Automatische Updates'). Leer lassen = ohne Updates."
+        $tok = (Read-Host "    GitHub-Token einfügen").Trim()
+        if (-not $tok) { break }
+    }
+    if ($tok) {
+        [IO.File]::WriteAllText($tokenDatei, $tok, (New-Object Text.UTF8Encoding $false))
+        # nur SYSTEM und Administratoren dürfen den Token lesen
+        & icacls $tokenDatei /inheritance:r /grant:r '*S-1-5-18:F' '*S-1-5-32-544:F' | Out-Null
+        if (-not (Test-Path (Join-Path $root '.git'))) {
+            # Projekt kam als ZIP: Git-Verwaltung nachrüsten, lokale Dateien (.env, moto.db) bleiben
+            Git-Mit $tok init -q -b main | Out-Null
+            Git-Mit $tok remote add origin $RepoUrl | Out-Null
+        }
+        Git-Mit $tok fetch -q origin main
+        $hatCommits = $true
+        try { Git-Mit $tok rev-parse -q --verify HEAD | Out-Null; $hatCommits = ($LASTEXITCODE -eq 0) } catch { $hatCommits = $false }
+        if ($hatCommits) { Git-Mit $tok merge -q --ff-only FETCH_HEAD | Out-Null }
+        else { Git-Mit $tok checkout -q -f -B main FETCH_HEAD | Out-Null }
+        if ($LASTEXITCODE -eq 0) { Fertig "Updates aktiv: Der Laptop holt Änderungen alle 10 Minuten selbst" }
+        else { Write-Host "    Stand konnte nicht abgeglichen werden (lokal geänderte Dateien?). Siehe logs\start.log." -ForegroundColor Yellow }
+    } else {
+        Write-Host "    Ohne Token: keine automatischen Updates." -ForegroundColor Yellow
+    }
+}
+
+# --- 5. Autostart (Aufgabenplanung) ------------------------------------------
 Schritt "Autostart einrichten"
 $lauf = Join-Path $PSScriptRoot 'lauf.ps1'
 $aktion = New-ScheduledTaskAction -Execute 'powershell.exe' -WorkingDirectory $root `
@@ -157,7 +215,7 @@ Register-ScheduledTask -TaskName $TaskName -Action $aktion -Trigger $ausloeser -
     -Description 'Telegram-Wartungsbot (moto-service)' -Force | Out-Null
 Fertig "Aufgabe '$TaskName' angelegt: startet mit Windows, auch ohne Anmeldung"
 
-# --- 5. Energieoptionen (nur am Netzteil) ------------------------------------
+# --- 6. Energieoptionen (nur am Netzteil) ------------------------------------
 Schritt "Energieoptionen am Netzteil: kein Ruhezustand, Zuklappen = nichts tun"
 powercfg /change standby-timeout-ac 0 | Out-Null
 powercfg /change hibernate-timeout-ac 0 | Out-Null
@@ -165,7 +223,7 @@ powercfg /setacvalueindex SCHEME_CURRENT SUB_BUTTONS LIDACTION 0 | Out-Null
 powercfg /setactive SCHEME_CURRENT | Out-Null
 Fertig "Gesetzt (im Akkubetrieb bleibt alles wie vorher)"
 
-# --- 6. Starten und prüfen ---------------------------------------------------
+# --- 7. Starten und prüfen ---------------------------------------------------
 Schritt "Bot starten"
 $log = Join-Path $root 'logs\moto-service.log'
 $vorher = if (Test-Path $log) { (Get-Item $log).Length } else { 0 }

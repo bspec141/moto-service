@@ -70,6 +70,24 @@ Das Programm installiert bei Bedarf Python 3.12 (über winget), legt `.venv` an,
 
 Die Abschnitte unten (manuelles Setup, NSSM) brauchst du dann nicht.
 
+### Automatische Updates
+
+Der Laptop holt alle 10 Minuten den Stand von `main` aus GitHub. Gibt es Änderungen (z.B. neue Einträge in `data/historie.yaml` oder ein angepasster Wartungsplan), übernimmt er sie und startet den Bot neu. Du musst also nicht mehr auf den Laptop zugreifen: Änderung ins Repo pushen, fertig.
+
+Weil das Repo privat ist, braucht der Laptop einen Token, der nur lesen darf:
+
+1. GitHub → Profilbild → **Settings** → **Developer settings** → **Personal access tokens** → **Fine-grained tokens** → **Generate new token**
+2. Name z.B. `moto-laptop`, Ablauf möglichst lang (oder „No expiration“, falls angeboten)
+3. **Repository access:** *Only select repositories* → `moto-service`
+4. **Permissions → Repository permissions → Contents:** *Read-only* (sonst nichts)
+5. Token kopieren und bei `installieren.cmd` einfügen, wenn danach gefragt wird.
+
+Der Token liegt in `.github-token` (nicht im Repo, nur für SYSTEM und Administratoren lesbar). Läuft er ab: neuen erstellen und `installieren.cmd` nochmals ausführen. Updates und Fehler stehen in `logs\start.log`.
+
+Gut zu wissen:
+- Einträge in den YAML-Dateien werden nur **hinzugefügt**. Einen Eintrag ändern (z.B. andere km) ergibt einen zusätzlichen Eintrag; löschen geht über die YAML nicht.
+- Auf dem Laptop selbst keine Dateien im Projekt ändern, sonst kann das Update nicht übernommen werden (`.env`, `moto.db`, `logs` sind davon nicht betroffen).
+
 ### Manuell
 
 Voraussetzung: **Python 3.12** von python.org. Beim Installer „Add python.exe to PATH“ anhaken.
